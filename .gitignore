@@ -1,2 +1,4 @@
 /node_modules
 .env
+/audios/** */
+/.wwebjs_cache

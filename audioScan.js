@@ -29,12 +29,26 @@ async function enviarTextoParaGPT(texto) {
     const prompt = `
 Extraia do texto abaixo as seguintes informações e retorne apenas o JSON, sem explicações:
 - erro: 0 ou 1 (caso o audio sejá algo sem contexto ou não seja possível interpretar)
+- msg_erro: Pequeno feedback do erro se sera enviado na mensagem de volta
 - fluxo: 0 (entrada, ganhos, lucros) ou 1 (saida, gastos)
 - valor: número sem símbolo (ex: 23.50, converter em reais caso outra moeda seja mensionada)
-- local: nome do estabelecimento
+- local: Nome do Estabelecimento
 - data: no formato DD/MM/AAAA
-- forma_pagamento: dinheiro, cartão, pix ou boleto.
-- carteira: ex: cartão nubank, conta corrente itau, cofrinho
+- forma_pagamento: Dinheiro, Cartão, Pix ou Boleto.
+- carteira: ex: Cartão Nubank, Conta Corrente Itau, Cofrinho
+
+Exemplo:
+
+{
+  "erro": 0,
+  "msg_erro" : null,
+  "fluxo": 1,
+  "valor": 23.00,
+  "local": "Padaria Estrela",
+  "data": 30/04/2025,
+  "forma_pagamento": null
+  "carteira": Conta PicPay
+}
 
 Texto:
 "${texto}"
@@ -42,7 +56,8 @@ Texto:
 
     try {
         const response = await axios.post('https://api.openai.com/v1/chat/completions', {
-            model: "gpt-4o", // ou "gpt-3.5-turbo" se quiser economizar
+            model: "gpt-3.5-turbo", 
+            // model: "gpt-4o", // ou "gpt-3.5-turbo" se quiser economizar
             messages: [
                 { role: "user", content: prompt }
             ],

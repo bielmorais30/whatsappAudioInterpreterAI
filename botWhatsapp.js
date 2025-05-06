@@ -12,7 +12,8 @@ client.on('qr', qr => {
     qrcode.generate(qr, {small: true});
 });
 // Listening to all incoming messages
-client.on('message_create',  async msg => {
+client.on('message_create',  async msg => { 
+    // Criar condição para só análisar as mensagens de uma conversa em específico
 	if (msg.hasMedia) {
         const media = await msg.downloadMedia();
 
@@ -26,7 +27,7 @@ client.on('message_create',  async msg => {
 
             console.log(`Áudio salvo como: ./audios/${fileName}`);
         }
-    }
+    } // Criar fluxo caso a mensagem não seja um audio (enviar para I.A)
 });
 
 

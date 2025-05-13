@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const supabase = require('../db.js')
+const supabase = require('../services/db.js')
 
 // CREATE - POST /users
 router.post('/', async (req, res) => {

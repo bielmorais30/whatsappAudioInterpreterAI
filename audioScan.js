@@ -2,6 +2,7 @@ require('dotenv').config();
 const axios = require('axios');
 const FormData = require('form-data');
 const fs = require('fs');
+const { adicionarUsuario } = require("./services/users.js");
 
 async function enviarAudioParaWhisper(caminhoAudio) {
     const form = new FormData();
@@ -84,6 +85,8 @@ enviarAudioParaWhisper(caminhoAudioWav)
     .then((jsonExtraido) => {
         console.log('Resultado final:', jsonExtraido);
         // Aqui você pode salvar o JSON no banco ou fazer o que quiser!
+        adicionarUsuario(jsonExtraido);
+
     })
     .catch((err) => {
         console.error('Erro:', err);

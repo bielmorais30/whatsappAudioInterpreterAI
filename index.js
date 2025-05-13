@@ -6,7 +6,8 @@ require('dotenv').config();
 app.use(express.json())
 app.use('/users', usersRoutes)
 
-const PORT = 3000
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`)
+// const PORT = 3000
+const port = process.env.PORT || 4000 
+app.listen(port, () => {
+  console.log(`Servidor rodando na porta: ${port}`)
 })

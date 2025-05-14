@@ -12,10 +12,20 @@ router.post('/', async (req, res) => {
 
 // READ - GET /users
 router.get('/', async (req, res) => {
-  const { data, error } = await supabase.from('usuarios').select('*')
-  if (error) return res.status(500).json({ error: error.message })
-  res.json(data)
-})
+  const id  = req.query.id;
+
+  let query = supabase.from('usuarios').select('*');
+
+  if (id) {
+    query = query.eq('id', id).single(); // .single() espera só um resultado
+  }
+
+  const { data, error } = await query;
+
+  if (error) return res.status(500).json({ error: error.message });
+
+  res.json(data);
+});
 
 // UPDATE - PUT /users/:id
 router.put('/:id', async (req, res) => {

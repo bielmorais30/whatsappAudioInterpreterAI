@@ -7,7 +7,7 @@ const path = require('path');
 ffmpeg.setFfmpegPath(ffmpegPath);
 
 // Função para converter
-function convertOggToWav(inputPath, outputPath) {
+async function convertOggToWav(inputPath, outputPath) {
     return new Promise((resolve, reject) => {
         ffmpeg(inputPath)
             .toFormat('wav')
@@ -24,7 +24,9 @@ function convertOggToWav(inputPath, outputPath) {
 }
 
 // Exemplo de uso:
-const inputAudio = path.join(__dirname, 'audios', 'audio.ogg');
-const outputAudio = path.join(__dirname, 'audios', 'audio.wav');
+// const inputAudio = path.join(__dirname, 'audios', 'audio.ogg');
+// const outputAudio = path.join(__dirname, 'audios', 'audio.wav');
 
-convertOggToWav(inputAudio, outputAudio);
+// convertOggToWav(inputAudio, outputAudio);
+
+module.exports = {convertOggToWav}

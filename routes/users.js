@@ -14,10 +14,15 @@ router.post('/', async (req, res) => {
     if (error) {
       return res.status(500).json({ error: error.message });
     }else{
-      res.status(201).json({msg: "Cliete criado com sucesso!!"})
+      return res.status(201).json({
+        ok: true,
+        msg: "Cliente criado com sucesso!",
+        data
+      });
+      
     }
 
-    return res.status(201).json(data); // Use 201 Created
+
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: 'Erro interno no servidor.' });

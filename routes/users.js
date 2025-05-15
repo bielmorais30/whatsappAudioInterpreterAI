@@ -4,8 +4,8 @@ const supabase = require('../services/db.js')
 
 // CREATE - POST /users
 router.post('/', async (req, res) => {
-  const { nome, email } = req.body
-  const { data, error } = await supabase.from('usuarios').insert([{ nome, email }])
+  const { nome, email, celular, senha } = req.body
+  const { data, error } = await supabase.from('usuarios').insert([{ nome, email, celular, senha }])
   if (error) return res.status(500).json({ error: error.message })
   res.json(data)
 })

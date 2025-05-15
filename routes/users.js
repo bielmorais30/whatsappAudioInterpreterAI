@@ -32,11 +32,14 @@ router.post('/', async (req, res) => {
 // READ - GET /users
 router.get('/', async (req, res) => {
   const id  = req.query.id;
+  const email = req.query.email;
 
   let query = supabase.from('usuarios').select('*');
 
   if (id) {
     query = query.eq('id', id).single(); // .single() espera só um resultado
+  }else if(email){
+    query = query.eq('email', id).single();
   }
 
   const { data, error } = await query;

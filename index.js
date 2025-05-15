@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const usersRoutes = require('./routes/users')
 const movimentacaoRoutes = require('./routes/movimentacao')
+const cors = require('cors');
+app.use(cors());
 require('dotenv').config();
 
 require('./botWhatsapp');

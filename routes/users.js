@@ -4,11 +4,23 @@ const supabase = require('../services/db.js')
 
 // CREATE - POST /users
 router.post('/', async (req, res) => {
-  const { nome, email, celular, senha } = req.body
-  const { data, error } = await supabase.from('usuarios').insert([{ nome, email, celular, senha }])
-  if (error) return res.status(500).json({ error: error.message })
-  res.json(data)
-})
+  try {
+    const { nome, email, celular, senha } = req.body;
+
+    const { data, error } = await supabase
+      .from('usuarios')
+      .insert([{ nome, email, celular, senha }]);
+
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+
+    return res.status(201).json(data); // Use 201 Created
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Erro interno no servidor.' });
+  }
+});
 
 // READ - GET /users
 router.get('/', async (req, res) => {

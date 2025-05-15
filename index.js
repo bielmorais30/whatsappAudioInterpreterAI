@@ -4,15 +4,22 @@ const usersRoutes = require('./routes/users')
 const movimentacaoRoutes = require('./routes/movimentacao')
 const cors = require('cors');
 
+// Habilita CORS para o front específico
+app.use(cors({
+  origin: 'https://snack-web-player.s3.us-west-1.amazonaws.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
+// Middleware manual para responder preflight
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*'); // ou domínio específico
+  res.header('Access-Control-Allow-Origin', 'https://snack-web-player.s3.us-west-1.amazonaws.com');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
   if (req.method === 'OPTIONS') {
-    return res.sendStatus(204); // responde a preflight
+    return res.sendStatus(204);
   }
-
   next();
 });
 

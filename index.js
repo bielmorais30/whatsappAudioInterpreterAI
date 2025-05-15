@@ -3,7 +3,13 @@ const app = express()
 const usersRoutes = require('./routes/users')
 const movimentacaoRoutes = require('./routes/movimentacao')
 const cors = require('cors');
-app.use(cors());
+
+app.use(cors({
+  origin: '*', // ou 'https://snack-web-player.s3.us-west-1.amazonaws.com' 
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
 require('dotenv').config();
 
 require('./botWhatsapp');

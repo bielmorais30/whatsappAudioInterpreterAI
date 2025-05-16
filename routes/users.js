@@ -39,7 +39,7 @@ router.get('/', async (req, res) => {
   if (id) {
     query = query.eq('id', id).single(); // .single() espera só um resultado
   }else if(email){
-    query = query.eq('email', id).single();
+    query = query.eq('email', email).single();
   }
 
   const { data, error } = await query;

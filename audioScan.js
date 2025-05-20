@@ -40,7 +40,7 @@ Extraia do texto abaixo as seguintes informações e retorne apenas o JSON, sem 
 - forma_pagamento: Dinheiro, Cartão, Pix ou Boleto.
 - carteira: ex: Cartão Nubank, Conta Corrente Itau, Cofrinho
 
-Exemplo:
+Exemplo 1 (Comprei uma Rosca Cremosa por 23 reais na Padaria Estrela com o dinheiro da minha conta Picpay):
 
 {
   "erro": 0,
@@ -52,6 +52,20 @@ Exemplo:
   "data": 2025/04/30,
   "forma_pagamento": null
   "carteira": Conta PicPay
+}
+
+Exemplo 2 (Recebi 50 reais de comissão no pix):
+
+{
+  "erro": 0,
+  "msg_erro" : null,
+  "fluxo": 0,
+  "valor": 50.00,
+  "produto": "Comissão",
+  "local": null,
+  "data": null,
+  "forma_pagamento": pix
+  "carteira": null
 }
 
 Texto:

@@ -67,13 +67,17 @@ client.on("message_create", async (msg) => {
             return processarAudio(); // Retorna a Promise da função
           })
           .then((dados) => {
+            msg.reply(`Adicionando nova movimentação:\n ${JSON.stringify(dados)}`);
             return adicionarMovimentacao(dados, sender); // Retorna a Promise da função
           })
           .then((resultado) => {
             if (!resultado.success) {
               console.log("Erro ao adicionar movimentação:", resultado.message);
+              msg.reply(`Erro ao adicionar! ${resultado.message}`);
+              
             } else {
               console.log("Movimentação salva com sucesso!", resultado.data);
+              msg.reply(`Adicionando com sucesso!`);
             }
           })
           .catch((err) => {

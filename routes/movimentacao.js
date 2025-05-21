@@ -4,12 +4,13 @@ const supabase = require('../services/db.js')
 const {verMovimentacoes} = require('../services/movimentacao.js')
 
 // CREATE - POST /movimentacao
-// router.post('/', async (req, res) => {
-//   const { nome, email } = req.body
-//   const { data, error } = await supabase.from('usuarios').insert([{ nome, email }])
-//   if (error) return res.status(500).json({ error: error.message })
-//   res.json(data)
-// })
+router.post('/', async (req, res) => {
+  const { id_usuario, fluxo, valor, forma_pagamento, data_mov, produto, categoria } = req.body
+  const now = new Date();
+  const { data, error } = await supabase.from('movimentacao').insert([{ id_usuario, fluxo, valor, forma_pagamento, data : data_mov, created_at : now, produto, categoria }])
+  if (error) return res.status(500).json({ error: error.message })
+  res.json(data)
+})
 
 // READ - GET /movimentacao
 router.get('/', async (req, res) => {

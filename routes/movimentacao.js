@@ -9,7 +9,7 @@ router.post('/', async (req, res) => {
   const now = new Date();
   const { data, error } = await supabase.from('movimentacao').insert([{ id_usuario, fluxo, valor, forma_pagamento, data : data_mov, created_at : now, produto, categoria }])
   if (error) return res.status(500).json({ error: error.message })
-  res.json(data)
+  res.status(201).json(data)
 })
 
 // READ - GET /movimentacao

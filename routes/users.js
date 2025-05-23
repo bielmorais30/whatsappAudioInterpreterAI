@@ -5,7 +5,9 @@ const supabase = require('../services/db.js')
 // CREATE - POST /users
 router.post('/', async (req, res) => {
   try {
-    const { nome, email, celular, senha } = req.body;
+    let { nome, email, celular, senha } = req.body;
+
+    celular = celular.replace(/[+\-\/\s]/g, "");
 
     const { data, error } = await supabase
       .from('usuarios')

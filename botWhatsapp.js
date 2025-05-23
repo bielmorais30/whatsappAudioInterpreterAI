@@ -2,92 +2,108 @@ const qrcode = require("qrcode-terminal");
 const path = require("path");
 const { Client, LocalAuth } = require("whatsapp-web.js");
 const { adicionarMovimentacao } = require("./services/movimentacao.js");
+const { pegarUsuarios } = require("./services/users.js");
 const { convertOggToWav } = require("./convert.js");
-const {processarAudio} = require("./audioScan.js");
+const { processarAudio } = require("./audioScan.js");
 
-const client = new Client({
-  authStrategy: new LocalAuth({
-    clientId: "meu-bot", // vai criar .wwebjs_auth/meu-bot
-  }),
-  puppeteer: {
-    headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  },
-});
+async function main() {
 
-const fs = require("fs");
+  const usuarios = (await pegarUsuarios()).data;
 
-client.on("ready", () => {
-  console.log("Client is ready!");
-});
+  const client = new Client({
+    authStrategy: new LocalAuth({
+      clientId: "meu-bot", // vai criar .wwebjs_auth/meu-bot
+    }),
+    puppeteer: {
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    },
+  });
 
-client.on("qr", (qr) => {
-  qrcode.generate(qr, { small: true });
-});
+  const fs = require("fs");
 
-client.on("authenticated", () => {
-  console.log("Sessão autenticada com sucesso!");
-});
+  client.on("ready", () => {
+    console.log("Client is ready!");
+  });
 
-client.on("auth_failure", (msg) => {
-  console.error("Falha na autenticação:", msg);
-});
+  client.on("qr", (qr) => {
+    qrcode.generate(qr, { small: true });
+  });
 
-const whiteList = ["5516993892506"];
+  client.on("authenticated", () => {
+    console.log("Sessão autenticada com sucesso!");
+  });
 
-// Listening to all incoming messages
-client.on("message_create", async (msg) => {
-  // Criar condição para só análisar as mensagens de uma conversa em específico
-  let sender = msg.from.split("@");
-  sender = sender[0];
+  client.on("auth_failure", (msg) => {
+    console.error("Falha na autenticação:", msg);
+  });
 
-  if (whiteList.includes(sender)) {
-    console.log("Cliente autenticado: " + sender);
-    if (msg.hasMedia) {
-      const media = await msg.downloadMedia();
+  // const whiteList = ["5516993892506"];
 
-      if (media.mimetype.startsWith("audio")) {
-        console.log("Áudio recebido!");
+  // const users = JSON.parse(usuarios);
 
-        // Salvar o áudio em um arquivo
-        // const fileName = `audio-${Date.now()}.ogg`;
-        const fileName = `audio.ogg`;
-        fs.writeFileSync(`./audios/${fileName}`, media.data, {
-          encoding: "base64",
-        });
+  const whiteList = usuarios.map((user) => user.celular);
 
-        console.log(`Áudio salvo como: ./audios/${fileName}`);
+  console.log(whiteList);
 
-        const inputAudio = path.join(__dirname, "audios", "audio.ogg");
-        const outputAudio = path.join(__dirname, "audios", "audio.wav");
+  // Listening to all incoming messages
+  client.on("message_create", async (msg) => {
+    // Criar condição para só análisar as mensagens de uma conversa em específico
+    let sender = msg.from.split("@");
+    sender = sender[0];
 
-        // require('./convert.js')
-        convertOggToWav(inputAudio, outputAudio)
-          .then(() => {
-            return processarAudio(); // Retorna a Promise da função
-          })
-          .then((dados) => {
-            msg.reply(`Adicionando nova movimentação:\n ${JSON.stringify(dados)}`);
-            return adicionarMovimentacao(dados, sender); // Retorna a Promise da função
-          })
-          .then((resultado) => {
-            if (!resultado.success) {
-              console.log("Erro ao adicionar movimentação:", resultado.message);
-              msg.reply(`Erro ao adicionar! ${resultado.message}`);
-              
-            } else {
-              console.log("Movimentação salva com sucesso!", resultado.data);
-              msg.reply(`Adicionando com sucesso!`);
-            }
-          })
-          .catch((err) => {
-            console.error("Erro em alguma etapa do processamento:", err);
+    if (whiteList.includes(sender)) {
+      console.log("Cliente autenticado: " + sender);
+      if (msg.hasMedia) {
+        const media = await msg.downloadMedia();
+
+        if (media.mimetype.startsWith("audio")) {
+          console.log("Áudio recebido!");
+
+          // Salvar o áudio em um arquivo
+          // const fileName = `audio-${Date.now()}.ogg`;
+          const fileName = `audio.ogg`;
+          fs.writeFileSync(`./audios/${fileName}`, media.data, {
+            encoding: "base64",
           });
 
+          console.log(`Áudio salvo como: ./audios/${fileName}`);
 
-      }
-    } // Criar fluxo caso a mensagem não seja um audio (enviar para I.A)
-  }
-});
+          const inputAudio = path.join(__dirname, "audios", "audio.ogg");
+          const outputAudio = path.join(__dirname, "audios", "audio.wav");
 
-client.initialize();
+          // require('./convert.js')
+          convertOggToWav(inputAudio, outputAudio)
+            .then(() => {
+              return processarAudio(); // Retorna a Promise da função
+            })
+            .then((dados) => {
+              msg.reply(
+                `Adicionando nova movimentação:\n ${JSON.stringify(dados)}`
+              );
+              return adicionarMovimentacao(dados, sender); // Retorna a Promise da função
+            })
+            .then((resultado) => {
+              if (!resultado.success) {
+                console.log(
+                  "Erro ao adicionar movimentação:",
+                  resultado.message
+                );
+                msg.reply(`Erro ao adicionar! ${resultado.message}`);
+              } else {
+                console.log("Movimentação salva com sucesso!", resultado.data);
+                msg.reply(`Adicionando com sucesso!`);
+              }
+            })
+            .catch((err) => {
+              console.error("Erro em alguma etapa do processamento:", err);
+            });
+        }
+      } // Criar fluxo caso a mensagem não seja um audio (enviar para I.A)
+    }
+  });
+
+  client.initialize();
+}
+
+main();

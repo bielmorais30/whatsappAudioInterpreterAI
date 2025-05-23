@@ -30,6 +30,20 @@ async function adicionarUsuario(dados) {
   
   }
 
+  async function pegarUsuarios() {
+
+    let query = supabase.from('usuarios').select('*');
+  
+    const { data, error } = await query;
+  
+    if (error) {
+      return { success: false, error: error.message };
+    }
+  
+    return { success: true, data };
+  
+  }
+
   async function deletarUsuario(id) {
     const { data, error } = await supabase
       .from('usuarios')
@@ -44,4 +58,4 @@ async function adicionarUsuario(dados) {
   }
   
 
-  module.exports = { adicionarUsuario, deletarUsuario, pegarUsuario};
+  module.exports = { adicionarUsuario, deletarUsuario, pegarUsuario, pegarUsuarios};

@@ -12,6 +12,29 @@ router.post('/', async (req, res) => {
   res.status(201).json(data)
 })
 
+// UPDATE - PUT /movimentacao/:id
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { id_usuario, fluxo, valor, forma_pagamento, data_mov, produto, categoria } = req.body;
+
+  const { data, error } = await supabase
+    .from('movimentacao')
+    .update({
+      id_usuario,
+      fluxo,
+      valor,
+      forma_pagamento,
+      data: data_mov,
+      produto,
+      categoria
+    })
+    .eq('id_movimentacao', id);
+
+  if (error) return res.status(500).json({ error: error.message });
+  res.status(200).json(data);
+});
+
+
 // READ - GET /movimentacao
 router.get('/', async (req, res) => {
   const id_usuario  = req.query.idusuario;

@@ -40,6 +40,9 @@ Extraia do texto abaixo as seguintes informações e retorne apenas o JSON, sem 
 - forma_pagamento: Dinheiro, Cartão, Pix ou Boleto.
 - carteira: ex: Cartão Nubank, Conta Corrente Itau, Cofrinho
 
+Caso alguma informação não seja fornecida, atribua o valor null naquela informação, os unicos valores obrigatorios a serem informados são:
+fluxo, valor e produto.
+
 Exemplo 1 (Comprei uma Rosca Cremosa por 23 reais na Padaria Estrela com o dinheiro da minha conta Picpay):
 
 {

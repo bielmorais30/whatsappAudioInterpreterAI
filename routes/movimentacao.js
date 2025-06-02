@@ -58,15 +58,15 @@ router.get('/', async (req, res) => {
 //   res.json(data)
 // })
 
-// // DELETE - DELETE /users/:id
-// router.delete('/:id', async (req, res) => {
-//   const { data, error } = await supabase
-//     .from('usuarios')
-//     .delete()
-//     .eq('id', req.params.id)
+// DELETE - DELETE /movimentacao/:id
+router.delete('/:id', async (req, res) => {
+  const { data, error } = await supabase
+    .from('movimentacao')
+    .delete()
+    .eq('id', req.params.id)
 
-//   if (error) return res.status(500).json({ error: error.message })
-//     res.status(200).json({ msg: 'Deletado com sucesso!', data })
-// })
+  if (error) return res.status(500).json({ error: error.message })
+    res.status(200).json({ msg: 'Deletado com sucesso!', data })
+})
 
 module.exports = router

@@ -63,7 +63,7 @@ router.delete('/:id', async (req, res) => {
   const { data, error } = await supabase
     .from('movimentacao')
     .delete()
-    .eq('id', req.params.id)
+    .eq('id_movimentacao', req.params.id)
 
   if (error) return res.status(500).json({ error: error.message })
     res.status(200).json({ msg: 'Deletado com sucesso!', data })

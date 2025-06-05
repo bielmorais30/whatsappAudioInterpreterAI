@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const usersRoutes = require('./routes/users')
 const movimentacaoRoutes = require('./routes/movimentacao')
+const gerarResumo = require('./routes/gerarResumo')
 const cors = require('cors');
 
 // Habilita CORS para o front específico
@@ -30,6 +31,7 @@ require('./botWhatsapp');
 app.use(express.json())
 app.use('/users', usersRoutes)
 app.use('/movimentacao', movimentacaoRoutes)
+app.use('/gerarResumo', gerarResumo)
 
 // const PORT = 3000
 const port = process.env.PORT || 4000 
